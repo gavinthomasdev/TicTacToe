@@ -14,7 +14,7 @@ public abstract class Term {
     System.out.print("\033[u");
   }
 
-  public static void setCursorPos(int y, int x) {
+  public static void setCursorPos(int x, int y) {
     System.out.print("\033[" + y + ";" + x + "H");
   }
 
@@ -25,4 +25,6 @@ public abstract class Term {
   public static void hideCursor(boolean tog) {
     System.out.print("\033[?25" + (tog ? "l" : "h"));
   }
+
+
 }
