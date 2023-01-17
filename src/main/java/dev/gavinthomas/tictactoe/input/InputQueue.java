@@ -1,5 +1,6 @@
 package dev.gavinthomas.tictactoe.input;
 
+import java.awt.Point;
 import java.util.function.Consumer;
 import java.util.Arrays;
 import java.util.List;
@@ -54,6 +55,19 @@ public abstract class InputQueue {
       for (int i = 0; i < ARGS.size(); i++) {
         if (ARGS.get(i) == ArgType.CODES) {
           ARGS.set(i, codes);
+        } else if (ARGS.get(i) == ArgType.TERMSIZE) {
+          StringBuilder xVal = new StringBuilder();
+          StringBuilder yVal = new StringBuilder();
+          for (int j = 0; j < codes.size(); j++) {
+            if (j <= 1 || codes.get(j) == 59) continue;
+            if (codes.get(j) == 82) break;
+            if (xVal.length() != 0 || codes.get(j - 1) == 59) {
+              xVal.append((char) codes.get(j).intValue());
+            } else {
+              yVal.append((char) codes.get(j).intValue());
+            }
+          }
+          ARGS.set(i, new Point(Integer.parseInt(xVal.toString()), Integer.parseInt(yVal.toString())));
         }
       }
       RUNNER.accept(ARGS.toArray());
@@ -99,7 +113,7 @@ public abstract class InputQueue {
   }
 
   public static enum ArgType {
-    CODES;
+    CODES, TERMSIZE;
   }
 
   private static abstract class pats {

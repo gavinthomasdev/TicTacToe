@@ -19,7 +19,7 @@ public abstract class input {
   private static boolean initiated = false;
   private static boolean readEnabled = false;
   private static boolean awaitingSizeReport = false;
-  private static List<InputQueue.QueueType> queue = new ArrayList<InputQueue.QueueType>();
+  public static volatile List<InputQueue.QueueType> queue = new ArrayList<InputQueue.QueueType>();
   private static ExecutorService exec = Executors.newSingleThreadExecutor();
 
   private static final List<Keybind> KEYS = new ArrayList<Keybind>();
@@ -28,7 +28,7 @@ public abstract class input {
   private static NonBlockingReader reader;
   private static BindingReader bindReader;
 
-  @SuppressWarnings("unchecked") // Suppress warning for bind allowing any type as an argument
+
   public static void init() {
     if (initiated) {
       return;
@@ -47,7 +47,7 @@ public abstract class input {
   }
 
   public static void toggleRead(boolean tog) {
-    if (readEnabled == false && tog == true) {
+    if (!readEnabled && tog) {
       try {
         exec.submit(input::read);
       } catch (RejectedExecutionException e) {
@@ -55,7 +55,7 @@ public abstract class input {
         exec.submit(input::read);
       }
       readEnabled = true;
-    } else if (readEnabled == true && tog == false) {
+    } else if (readEnabled && !tog) {
       readEnabled = false;
       exec.shutdownNow();
     }
@@ -82,57 +82,62 @@ public abstract class input {
 
   public static void read() {
     checkerloop: while (true) {
-      stream.add(bindReader.readCharacter());
-      // Out.append(stream.size());
-      List<InputQueue.QueueType> queueCheck = new ArrayList<InputQueue.QueueType>(queue);
-      List<InputQueue.QueueType> matched = new ArrayList<InputQueue.QueueType>();
-      
-      for (int i = 0; i < queueCheck.size(); i++) {
-        if (queueCheck.get(i).matches(stream)) {
-          matched.add(queueCheck.get(i));
-        } else if (queueCheck.get(i).matchStart(stream) == false) {
-          queueCheck.remove(i);
+      try {
+        stream.add(bindReader.readCharacter());
+        // Out.append(stream.size());
+        List<InputQueue.QueueType> queueCheck = new ArrayList<InputQueue.QueueType>(queue);
+        List<InputQueue.QueueType> matched = new ArrayList<InputQueue.QueueType>();
+//      System.out.println(queueCheck.size());
+        for (int i = 0; i < queueCheck.size(); i++) {
+//        System.out.print(i + ", ");
+          if (queueCheck.get(i).matches(stream)) {
+            matched.add(queueCheck.get(i));
+          } else if (!queueCheck.get(i).matchStart(stream)) {
+            queueCheck.remove(i);
+          }
         }
-      }
 
-      if (matched.size() != 0) {
-        Collections.sort(matched, new Comparator<InputQueue.QueueType>() {
-          public int compare(InputQueue.QueueType q1, InputQueue.QueueType q2) {
-            if (q1.priority() == q2.priority()) {
-              return 0;
+        if (matched.size() != 0) {
+          matched.sort(new Comparator<InputQueue.QueueType>() {
+            public int compare(InputQueue.QueueType q1, InputQueue.QueueType q2) {
+              if (q1.priority() == q2.priority()) {
+                return 0;
+              }
+              return (q1.priority() < q2.priority() ? -1 : 1);
             }
-            return (q1.priority() < q2.priority() ? -1 : 1);
-          }
-        });
-  
-        for (int i = 0; i < matched.size(); i++) {
-          matched.get(i).run(stream);
-          queue.remove(matched.get(i));
-          if (matched.get(i).doNext()) {
-            continue;
-          } else {
-            stream.clear();
-            continue checkerloop;
+          });
+
+          for (int i = 0; i < matched.size(); i++) {
+            matched.get(i).run(stream);
+            queue.remove(matched.get(i));
+            if (matched.get(i).doNext()) {
+              continue;
+            } else {
+              stream.clear();
+              continue checkerloop;
+            }
           }
         }
-      }
 
-      if (queueCheck.size() > 0) continue;
+        if (queueCheck.size() > 0) continue;
 
-      Keycode matchCode = Keycode.find(stream.stream().mapToInt(Integer::intValue).toArray());
+        Keycode matchCode = Keycode.find(stream.stream().mapToInt(Integer::intValue).toArray());
 
-      if (matchCode == null && Keycode.hasNext(stream.stream().mapToInt(Integer::intValue).toArray()) == false) {
-        stream.clear();
-        continue;
-      }
-
-      for (Keybind kb : KEYS) {
-        if (kb.hasKey(matchCode)) {
-          kb.handle(matchCode);
+        if (matchCode == null && !Keycode.hasNext(stream.stream().mapToInt(Integer::intValue).toArray())) {
+          stream.clear();
+          continue;
         }
-      }
-      if (Keycode.hasNext(stream.stream().mapToInt(Integer::intValue).toArray()) == false) {
-        stream.clear();
+
+        for (Keybind kb : KEYS) {
+          if (kb.hasKey(matchCode)) {
+            kb.handle(matchCode);
+          }
+        }
+        if (!Keycode.hasNext(stream.stream().mapToInt(Integer::intValue).toArray())) {
+          stream.clear();
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
       }
     }
   }
@@ -167,7 +172,7 @@ public abstract class input {
 
         if (qms.get(i).matches(codes)) {
           matched.add(qms.get(i));
-        } else if (qms.get(i).matchStart(codes) == false) {
+        } else if (!qms.get(i).matchStart(codes)) {
           qms.remove(i);
         }
       }
@@ -186,6 +191,7 @@ public abstract class input {
       });
 
       for (int i = 0; i < matched.size(); i++) {
+        System.out.println(i);
         matched.get(i).run(codes);
         queue.remove(matched.get(i));
         if (matched.get(i).doNext()) {

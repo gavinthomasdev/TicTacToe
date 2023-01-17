@@ -39,7 +39,7 @@ public abstract class listeners {
     }
   }
 
-  public class onExitListener {
+  public static class onExitListener {
     public onExitListener(Runnable runner) {
       Runtime.getRuntime().addShutdownHook(new Thread(runner));
     }
