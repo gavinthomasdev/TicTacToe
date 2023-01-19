@@ -16,17 +16,16 @@ import org.jline.utils.*;
 import org.jline.keymap.*;
 
 public abstract class input {
-  private static boolean initiated = false;
-  private static boolean readEnabled = false;
-  private static boolean awaitingSizeReport = false;
+  private static volatile boolean initiated = false;
+  private static volatile boolean readEnabled = false;
   public static volatile List<InputQueue.QueueType> queue = new ArrayList<InputQueue.QueueType>();
-  private static ExecutorService exec = Executors.newSingleThreadExecutor();
+  private static volatile ExecutorService exec = Executors.newSingleThreadExecutor();
 
   private static final List<Keybind> KEYS = new ArrayList<Keybind>();
   private static final List<Integer> stream = new ArrayList<Integer>();
-  private static Terminal terminal;
-  private static NonBlockingReader reader;
-  private static BindingReader bindReader;
+  private static volatile Terminal terminal;
+  private static volatile NonBlockingReader reader;
+  private static volatile BindingReader bindReader;
 
 
   public static void init() {
@@ -211,10 +210,10 @@ public abstract class input {
     return Keycode.find(codes.stream().mapToInt(Integer::intValue).toArray());
   }
 
-  public static void getSizeReport() {
-    System.out.print("\033[s\033[50000;50000H\033[6n\033[u");
-    awaitingSizeReport = true;
-  }
+//  public static void getSizeReport() {
+//    System.out.print("\033[s\033[50000;50000H\033[6n\033[u");
+//    awaitingSizeReport = true;
+//  }
 
   public static void addBinds(Keybind kb) {
     KEYS.add(kb);
@@ -223,6 +222,10 @@ public abstract class input {
   public static void addBinds(Keybind kb, Keybind... kbs) {
     KEYS.add(kb);
     KEYS.addAll(Arrays.asList(kbs));
+  }
+
+  public static void addBinds(List<Keybind> kbs) {
+    KEYS.addAll(kbs);
   }
 
   public static void removeBinds(Keybind kb) {

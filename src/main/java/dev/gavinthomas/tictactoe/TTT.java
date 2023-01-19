@@ -2,9 +2,11 @@ package dev.gavinthomas.tictactoe;
 
 import dev.gavinthomas.tictactoe.Board.PieceType;
 
+import java.util.Arrays;
+
 public abstract class TTT {
   public static PieceType getWinner(PieceType[][] board) {
-    return TTT.getWinner(board, board.length); // relies on it being a square
+    return TTT.getWinner(board, board.length);
   }
   public static PieceType getWinner(PieceType[][] board, int size) {
     // horizontals; x = column; y = row
@@ -36,10 +38,10 @@ public abstract class TTT {
         }
       }
     }
-
     // diagonals; xy = column & row
+//    if (size == 3) return null;
     
-    // top left to bottom right
+    // bottom left to top right
     for (int xy = 0; xy < size; xy++) {
       if (xy == 0) {
         continue;
@@ -51,7 +53,7 @@ public abstract class TTT {
         return board[xy][xy];
       }
     }
-    // top right to bottom left; x = column; y = row
+    // top left to bottom right; x = column; y = row
     for (int x = 0; x < size; x++) {
       int y = Math.abs(x - size + 1);
       if (x == 0) {
@@ -69,7 +71,6 @@ public abstract class TTT {
   }
 
   public static boolean gameOver(PieceType[][] board) {
-
     if (getWinner(board) != null) return true;
 
     for (PieceType[] arr : board) {

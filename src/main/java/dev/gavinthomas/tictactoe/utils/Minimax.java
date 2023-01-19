@@ -4,6 +4,7 @@ import dev.gavinthomas.tictactoe.Board.PieceType;
 import dev.gavinthomas.tictactoe.TTT;
 
 import java.awt.Point;
+import java.util.Arrays;
 
 public class Minimax {
   private final PieceType ownPiece, oppPiece;
@@ -24,7 +25,7 @@ public class Minimax {
     }
   }
 
-  public int minimax(PieceType[][] board, int turns, boolean ownTurn) {
+  public int minimax(PieceType[][] board, int turns, boolean ownTurn, int alpha, int beta) {
     int evalVal = eval(board, turns);
     if (evalVal == 0 && TTT.gameOver(board)) {
       return 0;
@@ -32,31 +33,40 @@ public class Minimax {
       return evalVal;
     }
 
-    int best = (ownTurn ? -100 : 100);
+    int best = (ownTurn ? -1000 : 1000);
 
+    if (turns >= 10) return best;
     for (int x = 0; x < board.length; x++) {
       for (int y = 0; y < board[x].length; y++) {
         if (board[x][y] != PieceType.BLANK) continue;
 //        System.out.println(x + ", " + y);
         board[x][y] = (ownTurn ? ownPiece : oppPiece);
-        int retVal = minimax(board, turns + 1, !ownTurn);
+        int retVal = minimax(board, turns + 1, !ownTurn, alpha, beta);
         best = (ownTurn ? Math.max(best, retVal) : Math.min(best, retVal));
         board[x][y] = PieceType.BLANK;
+        if (ownTurn) {
+          alpha = Math.max(alpha, best);
+        } else {
+          beta = Math.min(beta, best);
+        }
+        if (alpha >= beta) return best;
       }
     }
     return best;
 
   }
 
-  public Point getBest(PieceType[][] board) {
-    int best = -100;
+  public Point getBest(PieceType[][] boardArr) {
+    int best = -1000;
     Point bestMove = null;
+
+    PieceType[][] board = Arrays.copyOf(boardArr, boardArr.length);
 
     for (int x = 0; x < board.length; x++) {
       for (int y = 0; y < board[x].length; y++) {
         if (board[x][y] != PieceType.BLANK) continue;
         board[x][y] = ownPiece;
-        int move = minimax(board, 0, false);
+        int move = minimax(board, 0, false, -1000, 1000);
         board[x][y] = PieceType.BLANK;
 //        System.out.println(move + " > " + best);
 //        System.out.print(x + ", " + y + ": " + move + " | ");

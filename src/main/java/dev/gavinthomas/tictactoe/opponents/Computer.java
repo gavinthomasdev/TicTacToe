@@ -3,6 +3,7 @@ package dev.gavinthomas.tictactoe.opponents;
 import java.awt.Point;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 import dev.gavinthomas.tictactoe.types.Opponent;
 import dev.gavinthomas.tictactoe.Board;
@@ -13,19 +14,27 @@ import out.Out;
 public class Computer implements Opponent {
   private int moves;
   public final PieceType PIECE;
+  public final Minimax AI;
   private final Board board;
-  public Computer(Board board, PieceType PIECE) {
+  private final Consumer<Point> callback;
+  public Computer(Board board, final PieceType PIECE, Consumer<Point> callback) {
+    this.callback = callback;
     this.board = board;
     this.PIECE = PIECE;
+    this.AI = new Minimax(PIECE);
   }
 
   public PieceType getPiece() {
     return PIECE;
   }
 
-  public Point getMove() {
+  public void getMove() {
 //    if (board.tempGetCompMove == false) return null;
-    return new Minimax(PIECE).getBest(board.grid);
+//    try {
+//      Thread.sleep((long) (Math.random() * 1500) + 1000);
+//    } catch (InterruptedException ignore) {}
+
+    callback.accept(AI.getBest(board.grid));
     // return new Point();
   }
 
@@ -82,19 +91,6 @@ public class Computer implements Opponent {
       this.oppLocs.add(new Point(x, y));
       return this;
     }
-  }
-}
-
-
-
-
-class Move {
-  public List<Computer.MoveOption> moves = new ArrayList<Computer.MoveOption>();
-  public int x, y;
-
-  public Move(int x, int y) {
-    this.x = x;
-    this.y = y;
   }
 }
 
