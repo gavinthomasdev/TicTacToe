@@ -9,20 +9,22 @@ import dev.gavinthomas.tictactoe.ui.SelectionUI.Selection;
 import dev.gavinthomas.tictactoe.utils.listeners;
 
 import java.awt.Point;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Menu implements UIHolder {
   private final String tempFill = "".repeat(100) + "\n";
   private final List<UIComponent> comps = new ArrayList<UIComponent>();
+  private final List<Keybind> KBS = new ArrayList<Keybind>();
   private long lastResizeCheck = 0;
 
   public Menu() {
     new listeners.terminalResizeListener(this::resized);
     input.init();
     Selection[] sArr = {
-        new Selection("S1", this::temp, new Object[]{}),
-        new Selection("S1", this::temp, new Object[]{}),
+        new Selection("New Game", this::temp, new Object[]{}),
+        new Selection("Load Game", this::temp, new Object[]{}),
         new Selection("S1", this::temp, new Object[]{})
     };
     comps.add(new SelectionUI(this, sArr, new Point(3, 1)));

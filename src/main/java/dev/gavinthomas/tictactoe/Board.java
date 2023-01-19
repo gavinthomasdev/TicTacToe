@@ -22,8 +22,9 @@ public class Board {
   }
 
   public void setPiece(int x, int y, PieceType piece) {
+
     Term.saveCursor();
-    Term.setCursorPos((2 + (y * 10)), (5 + (x * 20)));
+    Term.setCursorPos((5 + (x * 20)), (2 + (Math.abs(y - (grid.length - 1)) * 10)));
 
     if (piece == PieceType.X) {
       System.out.print(Visuals.XBLOCK);
@@ -37,7 +38,7 @@ public class Board {
 
   public void highlightSpot(int x, int y, boolean tog) {
     Term.saveCursor();
-    Term.setCursorPos((1 + (y * 10)), (1 + (x * 20)));
+    Term.setCursorPos((1 + (x * 20)), (1 + (Math.abs(y - (grid.length - 1)) * 10)));
 
     if (tog) {
       System.out.print(Visuals.HIGHLIGHT);
@@ -60,7 +61,7 @@ public class Board {
       }
     }
 
-    highlightSpot(0, 0, true);
+//    highlightSpot(0, 0, true);
   }
 
   public PieceType getPiece(int x, int y) {
