@@ -1,7 +1,10 @@
 package dev.gavinthomas.tictactoe.ui;
 
+import dev.gavinthomas.tictactoe.TicTacToe;
 import dev.gavinthomas.tictactoe.types.UIComponent;
 import dev.gavinthomas.tictactoe.types.UIHolder;
+import dev.gavinthomas.tictactoe.types.Visuals;
+import dev.gavinthomas.tictactoe.utils.Term;
 
 import java.awt.Point;
 import java.util.Arrays;
@@ -10,6 +13,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class SelectionUI implements UIComponent {
+  private final Term TERM = TicTacToe.CURR.TERM;
   public static final String[] uiFormatting = {"\033[1m> ", " <\033[0m"};
   private Selection selected;
   private Point pos;
@@ -25,7 +29,8 @@ public class SelectionUI implements UIComponent {
   }
 
   public void render() {
-    holder.setLocation(pos, getRender());
+    TERM.setCursorPos(pos.x, pos.y);
+    TERM.print(getRender());
   }
 
 
@@ -75,9 +80,7 @@ public class SelectionUI implements UIComponent {
   }
 
   public static String getComp(String name, boolean selected, boolean cursorMove) {
-    String rawStr = "> " + name + " <";
-    return (selected ? "\033[1m" : "") + rawStr + (selected ? "\033[0m" : "") +
-        (cursorMove ? "\033[1B\033[" + rawStr.length() + "D" : "");
+    return Visuals.menuButton(name, selected) + (cursorMove ? "\033[2B\022[20D" : "");
   }
 
   public enum OPTION {
@@ -91,7 +94,7 @@ public class SelectionUI implements UIComponent {
 
     private Function<String, String[]> formatter;
 
-    private OPTION(Function<String, String[]> formatter) {
+    OPTION(Function<String, String[]> formatter) {
       this.formatter = formatter;
     }
   }
