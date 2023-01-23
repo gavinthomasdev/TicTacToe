@@ -12,7 +12,6 @@ public class Player implements Opponent {
   private final Board board;
   private final Point selectedSpot = new Point(0, 0);
   private volatile boolean canMove = false;
-  private volatile boolean tempCompTest = false;
   private final Consumer<Point> callback;
   public final PieceType PIECE;
   

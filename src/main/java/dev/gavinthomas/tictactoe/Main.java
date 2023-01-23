@@ -9,6 +9,7 @@ import dev.gavinthomas.tictactoe.TicTacToe;
 import dev.gavinthomas.tictactoe.TTT;
 import dev.gavinthomas.tictactoe.ui.Menu;
 import dev.gavinthomas.tictactoe.utils.Minimax;
+import dev.gavinthomas.tictactoe.utils.Term;
 import io.raffi.drawille.Canvas;
 import io.raffi.drawille.Turtle;
 
@@ -23,13 +24,32 @@ public class Main {
   public static boolean abc = true;
   public static void main(String[] args) throws Exception {
 
-    input.init();
-    Game g = new Game.Builder().computerOpponent().firstMove(0).build();
-    g.start();
+//    System.out.println(Visuals.title1(new boolean[]{true, true, true}));
 
+    new Term().setCursorPos(5, 5);
+    System.out.println(Visuals.title(new boolean[]{true, true, true, true, true, true, true, true, true}));
+//    String t = Visuals.title(new boolean[]{true, true, true, true, true, true, true, true, true});
+//    System.out.print("\033[5A");
+//    System.out.println(Visuals.title2("38;2;255;0;0"));
+//    System.out.print("\033[5A");
+//    System.out.println(Visuals.title3("38;2;255;0;0"));
+
+//    input.init();
+//System.out.println(Visuals.box(40, 20));
+//    TicTacToe tttG = new TicTacToe();
+//    tttG.init();
     while (abc) {
       Thread.onSpinWait();
     }
+
+    while (abc) {
+//      tttG.newGame(new Game.Builder().computerOpponent().firstMove(0));
+
+    }
+//    Game g = new Game.Builder().computerOpponent().firstMove(0).build();
+//    g.start();
+
+
 //    Turtle turtle = new Turtle ( 75, 50 );
 //    turtle.move ( turtle.getWidth () / 2, turtle.getHeight () / 2 );
 //    turtle.down ();

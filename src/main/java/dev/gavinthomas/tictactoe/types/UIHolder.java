@@ -4,7 +4,9 @@ import java.awt.Point;
 
 public interface UIHolder {
 
-  void setLocation(Point loc, String text);
+  Point offset();
+  Point size();
+  void render();
 
 //  public Point getOffset();
 }

@@ -44,19 +44,24 @@ public class Game {
           new Object[] { KeybindArgument.KEYCODE }, ((Player) plrs[1])::handleInput));
     }
     this.board.render();
-    input.toggleRead(true);
+//    input.toggleRead(true);
 
-    input.addBinds(KBS);
-
+//    input.addBinds(KBS);
+    TicTacToe.CURR.registerKB(KBS);
     plrs[currentTurn].getMove();
 //    while (!TTT.gameOver(board.grid)) {
     while (!finished) {
       Thread.onSpinWait();
     }
 
-    System.out.println(TTT.getWinner(board.grid));
+//    System.out.println(TTT.getWinner(board.grid));
 
-//    input.removeBinds(inputKB);
+//    input.removeBinds(KBS);
+    TicTacToe.CURR.deregisterKB(KBS);
+  }
+
+  public void render() {
+    this.board.render();
   }
 
   public void handleMove(Point pt) {

@@ -62,9 +62,9 @@ public abstract class input {
   
   public static void tread() {
     while (true) {
-      while (readEnabled == true) {
+      while (readEnabled) {
         Keycode key = nextKey();
-        if (readEnabled == false) { // probably not needed when using shutdownNow since everything is halted.
+        if (!readEnabled) { // probably not needed when using shutdownNow since everything is halted.
           break;
         }
         if (key == null) {
@@ -235,6 +235,10 @@ public abstract class input {
   public static void removeBinds(Keybind kb, Keybind... kbs) {
     KEYS.remove(kb);
     KEYS.removeAll(Arrays.asList(kbs));
+  }
+
+  public static void removeBinds(List<Keybind> kbs) {
+    KEYS.removeAll(kbs);
   }
 
   public static void clearBinds() {

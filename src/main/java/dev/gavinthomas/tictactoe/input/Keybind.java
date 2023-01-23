@@ -81,7 +81,7 @@ public class Keybind {
   }
 
   public void handle(Keycode key) {
-    if (props.enabled && System.currentTimeMillis() > (props.lastUsed + props.cooldown)) {
+    if (props.enabled && !props.forceDisabled && System.currentTimeMillis() > (props.lastUsed + props.cooldown)) {
       props.lastUsed = System.currentTimeMillis();
       run(key);
     }
@@ -102,6 +102,7 @@ public class Keybind {
 
   private final class Properties {
     private boolean enabled = true;
+    private boolean forceDisabled = false;
     private int cooldown = 0;
     private long lastUsed = 0;
   }
@@ -118,6 +119,10 @@ public class Keybind {
     public long lastUsed() {
       return props.lastUsed;
     }
+
+    public boolean forceDisabled() {
+      return props.forceDisabled;
+    }
   }
 
   public final class Setters {
@@ -132,6 +137,10 @@ public class Keybind {
 
     public void lastUsed(long time) {
       props.lastUsed = time;
+    }
+
+    public void forceDisabled(boolean tog) {
+      props.forceDisabled = tog;
     }
   }
 }
