@@ -19,7 +19,7 @@ public class Menu implements UIHolder {
   private final List<UIComponent> comps = new ArrayList<UIComponent>();
   private final List<Keybind> KBS = new ArrayList<Keybind>();
   private Point offset;
-  private final Point size = new Point(60, 26);
+  private final Point size = new Point(90, 30);
 
   public Menu() {
     Selection[] sArr = {
@@ -27,9 +27,11 @@ public class Menu implements UIHolder {
         new Selection("Load Game", this::temp, new Object[]{}),
         new Selection("Settings", this::temp, new Object[]{})
     };
-    comps.add(new SelectionUI(this, sArr, new Point((size().x / 2) - 10, 1)));
+
 //    comps.get(0).render();
-    SelectionUI sui = (SelectionUI) comps.get(0);
+    SelectionUI sui = new SelectionUI(this, sArr, new Point((size().x / 2) - 10, 10));
+    comps.add(sui);
+    comps.add(new Title(this, new Point((size().x / 2) - 39, 1)));
     KBS.add(new Keybind(
         new Keycode[] { Keycode.UP_ARROW },
         new Object[] { KeybindArgument.KEYCODE }, sui::moveUp));
@@ -42,11 +44,21 @@ public class Menu implements UIHolder {
     TicTacToe.CURR.registerKB(KBS);
   }
 
+  public void endTasks() {
+    for (UIComponent comp : comps) {
+      comp.endTasks();
+    }
+  }
+
   public void render() {
+    for (UIComponent comp : comps) {
+      comp.endTasks();
+    }
     TERM.clear(true);
     TERM.hideCursor(true);
     Point tSize = TicTacToe.CURR.SIZE;
-    offset = new Point((tSize.x / 2) - 30, (tSize.y / 2) - 13);
+//    offset = new Point((tSize.x / 2) - (size().x / 2), (tSize.y / 2) - (size().y / 2));
+    offset = new Point((tSize.x / 2) - (size().x / 2), 1);
     TERM.setCursorPos(offset.x, offset.y);
     TERM.print(Visuals.doubleLineBox(size.x, size.y));
 

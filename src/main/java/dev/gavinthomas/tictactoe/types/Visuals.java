@@ -240,7 +240,7 @@ public abstract class Visuals {
     for (int i = 0; i < TITLELTRS.length; i++) {
       String[] vals = { "\033[1B\033[" + (TITLELTRS[i].indexOf('\n')) + "D",
           (reds[i] ? "\033[38;2;255;0;0m" : "\033[37m"),
-          "\033[0m", "\033[0m", "\033[1C\033[5A"
+          "\033[38;2;128;128;128m", "\033[0m", "\033[1C\033[5A"
       };
 //      System.out.println(vals[1].replaceAll("\033", ""));
       StringBuilder newLtrBldr = new StringBuilder();
@@ -251,12 +251,13 @@ public abstract class Visuals {
         if (TITLELTRS[i].indexOf('\n', nextLine + 1) != -1) newLtrBldr.append("{0}");
       }
       newLtrBldr.append("{4}");
-      String newStr = newLtrBldr.toString();
-//      String newStr = newLtrBldr.toString().replaceAll("((?:╔|═|╝|║|╚|╗)+|░+)", "{2}$0{3}");
-      newStr = newStr.replaceAll("(█)+", "{1}$0{3}");
-      System.out.println(newStr);
+//      String newStr = newLtrBldr.toString();
+//      String newStr = newLtrBldr.toString().replaceAll("(░)+", "{2}$0{3}");
+      String newStr = newLtrBldr.toString().replaceAll("░", " ");
+      newStr = newStr.replaceAll("([╔═╝║╚╗█])+", "{1}$0{3}");
+//      System.out.println(newStr);
 //      System.out.println(MessageFormat.format(newStr, (Object[]) vals));
-      finStr.append(MessageFormat.format(newLtrBldr.toString(), (Object[]) vals));
+      finStr.append(MessageFormat.format(newStr, (Object[]) vals));
     }
     return finStr.toString();
   }

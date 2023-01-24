@@ -4,20 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c14a876e-278b-4330-85f5-bcf1d700598b" name="Changes" comment="Backup.">
+    <list default="true" id="c14a876e-278b-4330-85f5-bcf1d700598b" name="Changes" comment="Big Backup Again.">
+      <change afterPath="$PROJECT_DIR$/src/main/java/dev/gavinthomas/tictactoe/ui/Title.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dev/gavinthomas/tictactoe/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dev/gavinthomas/tictactoe/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dev/gavinthomas/tictactoe/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dev/gavinthomas/tictactoe/Game.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/dev/gavinthomas/tictactoe/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dev/gavinthomas/tictactoe/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/dev/gavinthomas/tictactoe/TicTacToe.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dev/gavinthomas/tictactoe/TicTacToe.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dev/gavinthomas/tictactoe/input/Keybind.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dev/gavinthomas/tictactoe/input/Keybind.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dev/gavinthomas/tictactoe/input/input.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dev/gavinthomas/tictactoe/input/input.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dev/gavinthomas/tictactoe/opponents/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dev/gavinthomas/tictactoe/opponents/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dev/gavinthomas/tictactoe/types/UIHolder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dev/gavinthomas/tictactoe/types/UIHolder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dev/gavinthomas/tictactoe/types/UIComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dev/gavinthomas/tictactoe/types/UIComponent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/dev/gavinthomas/tictactoe/types/Visuals.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dev/gavinthomas/tictactoe/types/Visuals.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/dev/gavinthomas/tictactoe/ui/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dev/gavinthomas/tictactoe/ui/Menu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/dev/gavinthomas/tictactoe/ui/SelectionUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dev/gavinthomas/tictactoe/ui/SelectionUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dev/gavinthomas/tictactoe/utils/Term.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dev/gavinthomas/tictactoe/utils/Term.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,8 +27,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -146,7 +141,14 @@
       <option name="project" value="LOCAL" />
       <updated>1674337829646</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Big Backup Again.">
+      <created>1674499123989</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1674499123990</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -170,6 +172,7 @@
     <MESSAGE value="UI modification." />
     <MESSAGE value="Playable state." />
     <MESSAGE value="Backup." />
-    <option name="LAST_COMMIT_MESSAGE" value="Backup." />
+    <MESSAGE value="Big Backup Again." />
+    <option name="LAST_COMMIT_MESSAGE" value="Big Backup Again." />
   </component>
 </project>

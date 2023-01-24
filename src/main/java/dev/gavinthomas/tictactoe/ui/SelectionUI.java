@@ -36,7 +36,7 @@ public class SelectionUI implements UIComponent {
     }
   }
 
-
+  public void endTasks() {}
 
   public String getRender() {
     StringBuilder vals = new StringBuilder();

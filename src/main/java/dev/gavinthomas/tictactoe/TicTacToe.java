@@ -106,11 +106,12 @@ public class TicTacToe {
     SIZE.x = x;
     SIZE.y = y;
     if (x < 100 || y < 32) {
-      this.renderSizeUI(x, y);
+      if (currentUI instanceof Menu) ((Menu) currentUI).endTasks();
       this.invalidSize = true;
       for (Keybind kb : KBS) {
         kb.set.forceDisabled(true);
       }
+      this.renderSizeUI(x, y);
       return;
     }
 
