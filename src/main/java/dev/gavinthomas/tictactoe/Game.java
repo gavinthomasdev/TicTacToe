@@ -24,7 +24,7 @@ public class Game {
   private Keybind inputKB;
 
   public Game(Builder config) {
-    this.board = new Board(config.firstMove);
+    this.board = new Board();
     currentTurn = config.firstMove;
     plrs[0] = new Player(this.board, (config.firstMove == 0 ? PieceType.X : PieceType.O), this::handleMove);
     if (config.computer) {
@@ -73,7 +73,11 @@ public class Game {
       return;
     }
     currentTurn = (currentTurn == 0 ? 1 : 0);
-    plrs[currentTurn].getMove();
+    if (plrs[1] instanceof Player) {
+      ((Player) plrs[currentTurn]).getMove(pt.x, pt.y);
+    } else {
+      plrs[currentTurn].getMove();
+    }
   }
 
 

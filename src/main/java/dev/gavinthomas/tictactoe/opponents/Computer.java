@@ -9,7 +9,6 @@ import dev.gavinthomas.tictactoe.types.Opponent;
 import dev.gavinthomas.tictactoe.Board;
 import dev.gavinthomas.tictactoe.Board.PieceType;
 import dev.gavinthomas.tictactoe.utils.Minimax;
-import out.Out;
 
 public class Computer implements Opponent {
   private int moves;
@@ -53,7 +52,6 @@ public class Computer implements Opponent {
     
       System.out.println(board.grid[0][0]);
       for (Point pt : moveOp.oppLocs) {
-        Out.append(board.grid[x + pt.x][y + pt.y]);
         if (board.grid[x + pt.x][y + pt.y] != (PIECE == PieceType.X ? PieceType.O : PieceType.X)) {
           return false;
         }

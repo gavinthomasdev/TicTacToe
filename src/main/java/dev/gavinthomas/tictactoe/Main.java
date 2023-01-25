@@ -24,58 +24,10 @@ public class Main {
   public static final PieceType O = PieceType.O;
   public static boolean abc = true;
   public static final Term TERM = new Term();
-  public static void titleAnim1(int x, int y, int delay, int duration) {
-    long startTime = System.currentTimeMillis();
-    while (System.currentTimeMillis() - startTime < duration) {
-      boolean[] currOn = {false, false, false, false, false, false, false, false, false};
-      int step = -2;
-      while (step < 10) {
-        for (int i = step; i < step + 3; i++) {
-          if (i > 8 || i < 0) continue;
-          currOn[i] = true;
-        }
-        TERM.setCursorPos(x, y);
-        TERM.print(Visuals.title(currOn));
-        step++;
-        currOn = new boolean[]{false, false, false, false, false, false, false, false, false};
-        try {
-          Thread.sleep(delay);
-        } catch (InterruptedException ignore) {
-        }
-      }
-      step = 9;
-      while (step > -2) {
-        for (int i = step; i > step - 3; i--) {
-          if (i > 8 || i < 0) continue;
-          currOn[i] = true;
-        }
-        TERM.setCursorPos(x, y);
-        TERM.print(Visuals.title(currOn));
-        step--;
-        currOn = new boolean[]{false, false, false, false, false, false, false, false, false};
-        try {
-          Thread.sleep(delay);
-        } catch (InterruptedException ignore) {
-        }
-      }
-    }
-  }
 
-  public static void titleAnim2(int x, int y, int delay, int duration) {
-    long startTime = System.currentTimeMillis();
-    int i = 0;
-    while(System.currentTimeMillis() - startTime < duration) {
-      boolean[] currOn = (i % 2 == 0 ?
-          new boolean[]{true, false, true, false, true, false, true, false, true} :
-          new boolean[]{false, true, false, true, false, true, false, true, false});
-      TERM.setCursorPos(x, y);
-      TERM.print(Visuals.title(currOn));
-      try {
-        Thread.sleep(delay);
-      } catch (InterruptedException ignore) {
-      }
-      i++;
-    }
+
+  public static void add(int num) {
+
   }
 
   public static void main(String[] args) throws Exception {
@@ -84,53 +36,16 @@ public class Main {
 
     int step = 0;
     List<Boolean> currOn = Arrays.asList(false, false, false, false, false, false, false, false, false);
-//    titleAnim2(5, 5, 500, 3000);
-//    if (abc) return;
-//    while (abc) {
-////      currOn.set(currOn.indexOf(currOn.get(8)), !currOn.get(8));
-//      for (int i = step; i < step + 3; i++) {
-//        currOn.set((i > 8 ? (i % 8) - 1 : i), true);
-//      }
-//      boolean[] bools = new boolean[9];
-//      for (int i = 0; i < currOn.size(); i++) {
-//        bools[i] = currOn.get(i);
-//        currOn.set(i, false);
-//      }
-//      TERM.setCursorPos(5, 5);
-//      System.out.println(Visuals.title(bools));
-//      step++;
-//      if (step > 8) step = 0;
-//      Thread.sleep(150);
-//    }
-//    while (abc) {
-//      Thread.sleep(30);
-//      currOn.set(currOn.indexOf(currOn.get(8)), !currOn.get(8));
-//      boolean[] bools = new boolean[9];
-//      for (int i = 0; i < currOn.size(); i++) {
-//        bools[i] = currOn.get(i);
-//      }
-//      t.setCursorPos(5, 5);
-//      System.out.println(Visuals.title(bools));
-//    }
-//    System.out.println(Visuals.title(new boolean[]{true, true, true, true, true, true, true, true, true}));
-//    String t = Visuals.title(new boolean[]{true, true, true, true, true, true, true, true, true});
-//    System.out.print("\033[5A");
-//    System.out.println(Visuals.title2("38;2;255;0;0"));
-//    System.out.print("\033[5A");
-//    System.out.println(Visuals.title3("38;2;255;0;0"));
 
 //    input.init();
 //System.out.println(Visuals.box(40, 20));
     TicTacToe tttG = new TicTacToe();
-//    tttG.init();
+    tttG.init();
     while (abc) {
-      Thread.onSpinWait();
+//      Thread.onSpinWait();
+      tttG.newGame(new Game.Builder().playerOpponent().firstMove(0));
     }
 
-    while (abc) {
-//      tttG.newGame(new Game.Builder().computerOpponent().firstMove(0));
-
-    }
 //    Game g = new Game.Builder().computerOpponent().firstMove(0).build();
 //    g.start();
 

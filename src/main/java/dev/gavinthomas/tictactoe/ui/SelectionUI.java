@@ -27,8 +27,9 @@ public class SelectionUI implements UIComponent {
     this.holder = holder;
 //    this.setSelected(this.selections.get(findNotDisabled(-1, true)));
   }
-
   public void render() {
+    TERM.setCursorPos(1, 32);
+    System.out.print(holder.offset());
     setCursorPos(pos.x, pos.y);
     TERM.print(getRender());
     if (selected == null) {
@@ -59,22 +60,34 @@ public class SelectionUI implements UIComponent {
     setSelected(selections.get(newIndex));
   }
 
+  boolean chk = false;
   public void setCursorPos(int x, int y) {
+    if (chk) {
+      TERM.setCursorPos(1, 32);
+      System.out.print(holder.offset().x + x);
+
+      chk = false;
+    }
     TERM.setCursorPos(holder.offset().x + x, holder.offset().y + y);
   }
-
   public void setSelected(Selection newSelect) {
     if (selected != null) {
+      chk = true;
       setCursorPos(pos.x, pos.y + (selections.indexOf(selected) * 3));
-      TERM.print(SelectionUI.getComp(selected.NAME,
-          (selected.mode == MODE.SELECTED ? MODE.NORMAL : MODE.DISABLED),
-          false));
+//      TERM.print(SelectionUI.getComp(selected.NAME,
+//          (selected.mode == MODE.SELECTED ? MODE.NORMAL : MODE.DISABLED),
+//          false));
       selected.mode = (selected.mode == MODE.SELECTED ? MODE.NORMAL : selected.mode);
     }
     this.selected = newSelect;
+    chk = true;
     setCursorPos(pos.x, pos.y + (selections.indexOf(selected) * 3));
+
+    TERM.setCursorPos(holder.offset().x + pos.x, holder.offset().y + pos.y);
     TERM.print(SelectionUI.getComp(selected.NAME, MODE.SELECTED, false));
     newSelect.mode = MODE.SELECTED;
+//    setCursorPos(pos.x, pos.y);
+//    TERM.print(getRender());
   }
 
   public void moveUp(Object[] args) {

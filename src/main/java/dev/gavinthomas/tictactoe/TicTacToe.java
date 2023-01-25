@@ -44,8 +44,8 @@ public class TicTacToe {
         new Keycode[] { Keycode.UP_ARROW, Keycode.DOWN_ARROW, Keycode.LEFT_ARROW, Keycode.RIGHT_ARROW, Keycode.SPACE, Keycode.LOWER_L },
         new Object[] { KeybindArgument.KEYCODE }, this::input);
     input.addBinds(menuKBS);
-    currentUI = new Menu();
-    currentUI.render();
+//    currentUI = new Menu();
+//    currentUI.render();
   }
 
   public void newGame(Game.Builder gameConfig) {

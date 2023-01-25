@@ -14,23 +14,21 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Menu implements UIHolder {
+public class GameOverMenu implements UIHolder {
   private final Term TERM = TicTacToe.CURR.TERM;
   private final List<UIComponent> comps = new ArrayList<UIComponent>();
   private final List<Keybind> KBS = new ArrayList<Keybind>();
-  private volatile Point offset;
-  private final Point size = new Point(90, 30);
+  private final Point size = new Point(96, 30);
 
-  public Menu() {
+  public GameOverMenu() {
     Selection[] sArr = {
-        new Selection("New Game", this::temp, new Object[]{}),
-        new Selection("Load Game", this::temp, new Object[]{}),
-        new Selection("Settings", this::temp, new Object[]{})
+        new Selection("Restart", this::temp, new Object[]{}),
+        new Selection("Home", this::temp, new Object[]{}),
+        new Selection("Exit", this::temp, new Object[]{})
     };
 
 //    comps.get(0).render();
     SelectionUI sui = new SelectionUI(this, sArr, new Point((size().x / 2) - 10, 10));
-//    sui.disable(sArr[1], true);
     comps.add(sui);
     comps.add(new Title(this, new Point((size().x / 2) - 39, 1)));
     KBS.add(new Keybind(
@@ -45,12 +43,6 @@ public class Menu implements UIHolder {
     TicTacToe.CURR.registerKB(KBS);
   }
 
-  public void endTasks() {
-    for (UIComponent comp : comps) {
-      comp.endTasks();
-    }
-  }
-
   public void render() {
     for (UIComponent comp : comps) {
       comp.endTasks();
@@ -59,8 +51,8 @@ public class Menu implements UIHolder {
     TERM.hideCursor(true);
     Point tSize = TicTacToe.CURR.SIZE;
 //    offset = new Point((tSize.x / 2) - (size().x / 2), (tSize.y / 2) - (size().y / 2));
-    offset = new Point((tSize.x / 2) - (size().x / 2), 1);
-    TERM.setCursorPos(offset.x, offset.y);
+//    offset = new Point((tSize.x / 2) - (size().x / 2), 1);
+//    TERM.setCursorPos(offset.x, offset.y);
     TERM.print(Visuals.doubleLineBox(size.x, size.y));
 
     for (UIComponent comp : comps) {
@@ -78,7 +70,8 @@ public class Menu implements UIHolder {
 
   public Point offset() {
 //    return new Point(offset.x + 2, offset.y + 1);
-    return new Point(offset.x + 1, offset.y + 1);
+    return new Point(1, 1);
+//    return new Point(offset.x + 1, offset.y + 1);
   }
 
   public Point size() {
