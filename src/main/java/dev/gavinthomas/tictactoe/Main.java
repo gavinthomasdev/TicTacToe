@@ -11,8 +11,8 @@ import dev.gavinthomas.tictactoe.ui.Menu;
 import dev.gavinthomas.tictactoe.ui.OptionUI;
 import dev.gavinthomas.tictactoe.utils.Minimax;
 import dev.gavinthomas.tictactoe.utils.Term;
-import io.raffi.drawille.Canvas;
-import io.raffi.drawille.Turtle;
+//import io.raffi.drawille.Canvas;
+//import io.raffi.drawille.Turtle;
 
 import java.awt.Point;
 import java.util.Arrays;
