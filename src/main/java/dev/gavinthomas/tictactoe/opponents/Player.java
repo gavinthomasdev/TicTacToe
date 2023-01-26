@@ -10,8 +10,8 @@ import dev.gavinthomas.tictactoe.Board.PieceType;
 
 public class Player implements Opponent {
   private final Board board;
-  private final Point selectedSpot = new Point(0, 0);
-  private volatile boolean canMove = false;
+  public final Point selectedSpot = new Point(0, 0);
+  public volatile boolean canMove = false;
   private final Consumer<Point> callback;
   public final PieceType PIECE;
   

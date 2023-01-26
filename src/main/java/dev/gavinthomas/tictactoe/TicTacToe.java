@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import dev.gavinthomas.tictactoe.input.Keybind;
 import dev.gavinthomas.tictactoe.input.KeybindArgument;
@@ -23,18 +24,16 @@ import dev.gavinthomas.tictactoe.utils.Term;
 import dev.gavinthomas.tictactoe.utils.listeners;
 
 public class TicTacToe {
-  private List<Keybind> KBS = new ArrayList<>();
-  private List<Keybind> KBSDIS = new ArrayList<>();
-  private Game game;
-  private final List<UIHolder> UIS = new ArrayList<>();
-  private UIHolder currentUI;
-  private Keybind menuKBS;
+  private final List<Keybind> KBS = new ArrayList<>();
+  private volatile Game game;
+  private volatile UIHolder currentUI;
   public boolean invalidSize = true;
   public final Term TERM = new Term();
   private final Term privTerm = new Term();
   public static TicTacToe CURR;
   public final Point SIZE = new Point(0, 0);
   public static final Point OFFSET = new Point(0, 0);
+  public final ExecutorService EXEC = Executors.newSingleThreadExecutor();
 
   public TicTacToe() {
     TicTacToe.CURR = this;
@@ -48,9 +47,19 @@ public class TicTacToe {
     input.toggleRead(true);
     TERM.requestSize(this::updateTermSize);
 //    UIS.add(new Menu());
-    UIS.add(new NewGameUI());
-    currentUI = UIS.get(0);
-    currentUI.render();
+    menu();
+  }
+
+  public void newGameUI() {
+    game = null;
+    currentUI = new NewGameUI();
+    render();
+  }
+
+  public void menu() {
+    game = null;
+    currentUI = new Menu();
+    render();
   }
 
   public void newGame(boolean comp1, boolean comp2) {
@@ -138,5 +147,9 @@ public class TicTacToe {
 
   public void input(Object[] args) {
 
+  }
+
+  public enum MODE {
+    GAME, NEWGAMEUI, MENU
   }
 }

@@ -21,6 +21,7 @@ public class Game {
   private final List<Keybind> KBS = new ArrayList<Keybind>();
   private int currentTurn = 0;
   private volatile boolean finished = false;
+  private volatile boolean quit = false;
   private Keybind inputKB;
 
   public Game(boolean plr1Comp, boolean plr2Comp) {
@@ -48,6 +49,9 @@ public class Game {
           new Keycode[] { Keycode.UP_ARROW, Keycode.DOWN_ARROW, Keycode.LEFT_ARROW, Keycode.RIGHT_ARROW, Keycode.SPACE, Keycode.LOWER_L },
           new Object[] { KeybindArgument.KEYCODE }, ((Player) plrs[1])::handleInput));
     }
+    KBS.add(new Keybind(
+        new Keycode[] { Keycode.LOWER_Q },
+        new Object[] { KeybindArgument.KEYCODE }, this::quit));
     render();
 //    input.toggleRead(true);
 
@@ -55,7 +59,7 @@ public class Game {
     TicTacToe.CURR.registerKB(KBS);
     plrs[currentTurn].getMove();
 //    while (!TTT.gameOver(board.grid)) {
-    while (!finished) {
+    while (!quit) {
       Thread.onSpinWait();
     }
 
@@ -70,6 +74,7 @@ public class Game {
   }
 
   public void handleMove(Point pt) {
+    if (finished || quit) return;
     board.setPiece(pt.x, pt.y, plrs[currentTurn].getPiece());
     board.grid[pt.x][pt.y] = plrs[currentTurn].getPiece();
 //    System.out.println(TTT.gameOver(board.grid));
@@ -85,6 +90,16 @@ public class Game {
     }
   }
 
+
+  public void quit(Object[] args) {
+    if (!finished && (plrs[currentTurn] instanceof Player p)) {
+      p.canMove = false;
+      board.highlightSpot(p.selectedSpot.x, p.selectedSpot.y, false);
+    };
+    finished = quit = true;
+    TicTacToe.CURR.deregisterKB(KBS);
+    TicTacToe.CURR.menu();
+  }
 
   public void input(Object[] args) {
     if (plrs[currentTurn] instanceof Player tempPlr) {

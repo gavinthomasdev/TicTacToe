@@ -88,6 +88,8 @@ public class Board implements UIHolder {
     TERM.hideCursor(true);
     TERM.setCursorPos(brdOffset().x, brdOffset().y);
     TERM.print(Visuals.GRID);
+    TERM.setCursorPos(offset.x + ((size.x - 9) / 2), offset.y + 30);
+    TERM.print("\033[1mQuit\033[0m: \033[3m<Q>\033[0m");
     TERM.endGroup();
 
     for (int i = 0; i < grid.length; i++) {
