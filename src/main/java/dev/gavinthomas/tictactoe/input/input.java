@@ -1,14 +1,10 @@
 package dev.gavinthomas.tictactoe.input;
 
 import java.io.IOException;
+import java.util.*;
 import java.util.stream.IntStream;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.concurrent.RejectedExecutionException;
 
 import org.jline.terminal.*;
@@ -126,12 +122,13 @@ public abstract class input {
           stream.clear();
           continue;
         }
-
-        for (Keybind kb : KEYS) {
-          if (kb.hasKey(matchCode)) {
-            kb.handle(matchCode);
+        try {
+          for (Keybind kb : KEYS) {
+            if (kb.hasKey(matchCode)) {
+              kb.handle(matchCode);
+            }
           }
-        }
+        } catch (ConcurrentModificationException ignore) {}
         if (!Keycode.hasNext(stream.stream().mapToInt(Integer::intValue).toArray())) {
           stream.clear();
         }

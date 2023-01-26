@@ -19,31 +19,36 @@ public class Game {
   private final Board board;
   private final Opponent[] plrs = new Opponent[2];
   private final List<Keybind> KBS = new ArrayList<Keybind>();
-  private int currentTurn;
+  private int currentTurn = 0;
   private volatile boolean finished = false;
   private Keybind inputKB;
 
-  public Game(Builder config) {
+  public Game(boolean plr1Comp, boolean plr2Comp) {
     this.board = new Board();
-    currentTurn = config.firstMove;
-    plrs[0] = new Player(this.board, (config.firstMove == 0 ? PieceType.X : PieceType.O), this::handleMove);
-    if (config.computer) {
-      plrs[1] = new Computer(this.board, (config.firstMove == 1 ? PieceType.X : PieceType.O), this::handleMove);
+    if (plr1Comp) {
+      plrs[0] = new Computer(this.board, PieceType.X, this::handleMove);
     } else {
-      plrs[1] = new Player(this.board, (config.firstMove == 1 ? PieceType.X : PieceType.O), this::handleMove);
+      plrs[0] = new Player(this.board, PieceType.X, this::handleMove);
+    }
+    if (plr2Comp) {
+      plrs[1] = new Computer(this.board, PieceType.O, this::handleMove);
+    } else {
+      plrs[1] = new Player(this.board, PieceType.O, this::handleMove);
     }
   }
 
   public void start() {
-    KBS.add(new Keybind(
-        new Keycode[] { Keycode.UP_ARROW, Keycode.DOWN_ARROW, Keycode.LEFT_ARROW, Keycode.RIGHT_ARROW, Keycode.SPACE, Keycode.LOWER_L },
-        new Object[] { KeybindArgument.KEYCODE }, ((Player) plrs[0])::handleInput));
+    if (plrs[0] instanceof Player) {
+      KBS.add(new Keybind(
+          new Keycode[]{Keycode.UP_ARROW, Keycode.DOWN_ARROW, Keycode.LEFT_ARROW, Keycode.RIGHT_ARROW, Keycode.SPACE, Keycode.LOWER_L},
+          new Object[]{KeybindArgument.KEYCODE}, ((Player) plrs[0])::handleInput));
+    }
     if (plrs[1] instanceof Player) {
       KBS.add(new Keybind(
           new Keycode[] { Keycode.UP_ARROW, Keycode.DOWN_ARROW, Keycode.LEFT_ARROW, Keycode.RIGHT_ARROW, Keycode.SPACE, Keycode.LOWER_L },
           new Object[] { KeybindArgument.KEYCODE }, ((Player) plrs[1])::handleInput));
     }
-    this.board.render();
+    render();
 //    input.toggleRead(true);
 
 //    input.addBinds(KBS);
@@ -73,7 +78,7 @@ public class Game {
       return;
     }
     currentTurn = (currentTurn == 0 ? 1 : 0);
-    if (plrs[1] instanceof Player) {
+    if (plrs[0] instanceof Player && plrs[1] instanceof Player) {
       ((Player) plrs[currentTurn]).getMove(pt.x, pt.y);
     } else {
       plrs[currentTurn].getMove();
@@ -84,32 +89,6 @@ public class Game {
   public void input(Object[] args) {
     if (plrs[currentTurn] instanceof Player tempPlr) {
       tempPlr.handleInput(args);
-    }
-  }
-
-  public static class Builder {
-    private boolean computer = true; // playing against computer
-    private int firstMove = (int) (2 * Math.random());
-
-    public Builder computerOpponent() {
-      this.computer = true;
-      return this;
-    }
-
-    public Builder playerOpponent() {
-      this.computer = false;
-      return this;
-    }
-
-    public Builder firstMove(int plr) {
-      if (plr != 0 && plr != 1)
-        return this;
-      this.firstMove = plr;
-      return this;
-    }
-
-    public Game build() {
-      return new Game(this);
     }
   }
 }

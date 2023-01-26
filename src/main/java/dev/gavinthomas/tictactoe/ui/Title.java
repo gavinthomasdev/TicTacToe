@@ -18,13 +18,13 @@ public class Title implements UIComponent {
   private final UIHolder holder;
   private volatile long animStart = 0;
   private volatile boolean animRunning = false;
-  private volatile ExecutorService animExec;
+  private ExecutorService animExec;
 //  private final AnimProps[] anims = {
 //      new AnimProps(50, 1000, this::titleAnim1),
 //      new AnimProps(250, 2000, this::titleAnim2),
 //  };
   private final AnimProps[] anims = {
-      new AnimProps(150, 1, this::titleAnim1),
+      new AnimProps(50, 1, this::titleAnim1),
       new AnimProps(250, 6, this::titleAnim2),
   };
 
@@ -35,13 +35,14 @@ public class Title implements UIComponent {
   }
   
   public void render() {
-//    toggleAnimations(false);
+    toggleAnimations(false);
+    TERM.startGroup();
     setCursorPos(pos.x, pos.y);
-//    TERM.print(Visuals.title(new boolean[]{false, false, false, false, false, false, false, false, false}));
-    TERM.print(Visuals.title(new boolean[]{false, true, false, true, false, true, false, true, false}));
-//    toggleAnimations(true);
+    TERM.print(Visuals.title(new boolean[]{false, false, false, false, false, false, false, false, false}));
+    TERM.endGroup();
+    toggleAnimations(true);
   }
-//  private boolean temp = true;
+  
   public void toggleAnimations(boolean tog) {
     if (tog) {
       if (animStart != 0) animExec.shutdownNow();
@@ -52,13 +53,13 @@ public class Title implements UIComponent {
         animExec.submit(this::startAnimations);
       }
     } else if (animStart != 0) {
-      animExec.shutdownNow();
       animStart = 0;
+      animExec.shutdownNow();
     }
   }
 
   public void endTasks() {
-//    toggleAnimations(false);
+    toggleAnimations(false);
   }
 
   private void startAnimations() {
@@ -67,10 +68,8 @@ public class Title implements UIComponent {
     animStart = selfStartTime;
 
     try {
-      Thread.sleep(3000);
-    } catch (InterruptedException ignored) {
-      return;
-    }
+      Thread.sleep(1000);
+    } catch (InterruptedException ignored) {}
     if (TicTacToe.CURR.SIZE != lastSize) return;
 
     AnimProps current = null;
@@ -90,6 +89,7 @@ public class Title implements UIComponent {
   }
   
   private void titleAnim1(Integer delay, Integer duration) {
+    long startTime = System.currentTimeMillis();
 //    while (System.currentTimeMillis() - startTime < duration) {
     for (int rep = 1; rep <= duration; rep++) {
       boolean[] currOn = {false, false, false, false, false, false, false, false, false};
@@ -100,8 +100,10 @@ public class Title implements UIComponent {
           if (i > 8 || i < 0) continue;
           currOn[i] = true;
         }
+        TERM.startGroup();
         setCursorPos(pos.x, pos.y);
         TERM.print(Visuals.title(currOn));
+        TERM.endGroup();
         step++;
         currOn = new boolean[]{false, false, false, false, false, false, false, false, false};
         try {
@@ -116,8 +118,10 @@ public class Title implements UIComponent {
           if (i > 8 || i < 0) continue;
           currOn[i] = true;
         }
+        TERM.startGroup();
         setCursorPos(pos.x, pos.y);
         TERM.print(Visuals.title(currOn));
+        TERM.endGroup();
         step--;
         currOn = new boolean[]{false, false, false, false, false, false, false, false, false};
         try {
@@ -126,27 +130,34 @@ public class Title implements UIComponent {
         }
       }
     }
+    TERM.startGroup();
     setCursorPos(pos.x, pos.y);
     TERM.print(Visuals.title(new boolean[]{false, false, false, false, false, false, false, false, false}));
+    TERM.endGroup();
   }
 
   private void titleAnim2(Integer delay, Integer duration) {
+    long startTime = System.currentTimeMillis();
     int i = 0;
 //    while(System.currentTimeMillis() - startTime < duration) {
     for (int rep = 1; rep <= duration; rep++) {
       boolean[] currOn = (i % 2 == 0 ?
           new boolean[]{true, false, true, false, true, false, true, false, true} :
           new boolean[]{false, true, false, true, false, true, false, true, false});
+      TERM.startGroup();
       setCursorPos(pos.x, pos.y);
       TERM.print(Visuals.title(currOn));
+      TERM.endGroup();
       try {
         Thread.sleep(delay);
       } catch (InterruptedException ignore) {
       }
       i++;
     }
+    TERM.startGroup();
     setCursorPos(pos.x, pos.y);
     TERM.print(Visuals.title(new boolean[]{false, false, false, false, false, false, false, false, false}));
+    TERM.endGroup();
   }
 }
 

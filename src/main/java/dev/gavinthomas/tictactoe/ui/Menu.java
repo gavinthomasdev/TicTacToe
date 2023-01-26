@@ -18,7 +18,7 @@ public class Menu implements UIHolder {
   private final Term TERM = TicTacToe.CURR.TERM;
   private final List<UIComponent> comps = new ArrayList<UIComponent>();
   private final List<Keybind> KBS = new ArrayList<Keybind>();
-  private volatile Point offset;
+  private final Point offset = new Point(0, 0);
   private final Point size = new Point(90, 30);
 
   public Menu() {
@@ -30,7 +30,6 @@ public class Menu implements UIHolder {
 
 //    comps.get(0).render();
     SelectionUI sui = new SelectionUI(this, sArr, new Point((size().x / 2) - 10, 10));
-//    sui.disable(sArr[1], true);
     comps.add(sui);
     comps.add(new Title(this, new Point((size().x / 2) - 39, 1)));
     KBS.add(new Keybind(
@@ -43,6 +42,7 @@ public class Menu implements UIHolder {
         new Keycode[] { Keycode.SPACE },
         new Object[] { KeybindArgument.KEYCODE }, sui::select));
     TicTacToe.CURR.registerKB(KBS);
+    sui.disable(sArr[1], true);
   }
 
   public void endTasks() {
@@ -55,13 +55,16 @@ public class Menu implements UIHolder {
     for (UIComponent comp : comps) {
       comp.endTasks();
     }
+    TERM.startGroup();
     TERM.clear(true);
     TERM.hideCursor(true);
     Point tSize = TicTacToe.CURR.SIZE;
 //    offset = new Point((tSize.x / 2) - (size().x / 2), (tSize.y / 2) - (size().y / 2));
-    offset = new Point((tSize.x / 2) - (size().x / 2), 1);
+    offset.x = (tSize.x / 2) - (size().x / 2);
+    offset.y = 1;
     TERM.setCursorPos(offset.x, offset.y);
     TERM.print(Visuals.doubleLineBox(size.x, size.y));
+    TERM.endGroup();
 
     for (UIComponent comp : comps) {
       comp.render();

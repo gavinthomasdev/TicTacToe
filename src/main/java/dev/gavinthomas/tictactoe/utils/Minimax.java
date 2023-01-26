@@ -4,7 +4,9 @@ import dev.gavinthomas.tictactoe.Board.PieceType;
 import dev.gavinthomas.tictactoe.TTT;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Minimax {
   private final PieceType ownPiece, oppPiece;
@@ -58,7 +60,7 @@ public class Minimax {
 
   public Point getBest(PieceType[][] boardArr) {
     int best = -1000;
-    Point bestMove = null;
+    List<Point> bestMoves = new ArrayList<>();
 
     PieceType[][] board = Arrays.copyOf(boardArr, boardArr.length);
 
@@ -70,13 +72,16 @@ public class Minimax {
         board[x][y] = PieceType.BLANK;
 //        System.out.println(move + " > " + best);
 //        System.out.print(x + ", " + y + ": " + move + " | ");
-        if (move >= best) {
-          bestMove = new Point(x, y);
+        if (move > best) {
+          bestMoves.clear();
+          bestMoves.add(new Point(x, y));
           best = move;
+        } else if (move == best) {
+          bestMoves.add(new Point(x, y));
         }
       }
     }
 
-    return bestMove;
+    return bestMoves.get((int) (Math.random() * bestMoves.size()));
   }
 }

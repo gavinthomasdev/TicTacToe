@@ -14,12 +14,10 @@ import java.util.function.Function;
 
 public class SelectionUI implements UIComponent {
   private final Term TERM = TicTacToe.CURR.TERM;
-  public static final String[] uiFormatting = {"\033[1m> ", " <\033[0m"};
   private Selection selected;
-  private Point pos;
+  private final Point pos;
   private final UIHolder holder;
   public final List<Selection> selections;
-  java.util.concurrent.Semaphore s = new java.util.concurrent.Semaphore(0);
 
   public SelectionUI(UIHolder holder, Selection[] selections, Point pos) {
     this.selections = Arrays.asList(selections);
@@ -27,11 +25,12 @@ public class SelectionUI implements UIComponent {
     this.holder = holder;
 //    this.setSelected(this.selections.get(findNotDisabled(-1, true)));
   }
+
   public void render() {
-    TERM.setCursorPos(1, 32);
-    System.out.print(holder.offset());
+    TERM.startGroup();
     setCursorPos(pos.x, pos.y);
     TERM.print(getRender());
+    TERM.endGroup();
     if (selected == null) {
       setSelected(selections.get(findNotDisabled(-1, true)));
     }
@@ -60,34 +59,26 @@ public class SelectionUI implements UIComponent {
     setSelected(selections.get(newIndex));
   }
 
-  boolean chk = false;
   public void setCursorPos(int x, int y) {
-    if (chk) {
-      TERM.setCursorPos(1, 32);
-      System.out.print(holder.offset().x + x);
-
-      chk = false;
-    }
     TERM.setCursorPos(holder.offset().x + x, holder.offset().y + y);
   }
+
   public void setSelected(Selection newSelect) {
     if (selected != null) {
-      chk = true;
+      TERM.startGroup();
       setCursorPos(pos.x, pos.y + (selections.indexOf(selected) * 3));
-//      TERM.print(SelectionUI.getComp(selected.NAME,
-//          (selected.mode == MODE.SELECTED ? MODE.NORMAL : MODE.DISABLED),
-//          false));
+      TERM.print(SelectionUI.getComp(selected.NAME,
+          (selected.mode == MODE.SELECTED ? MODE.NORMAL : MODE.DISABLED),
+          false));
       selected.mode = (selected.mode == MODE.SELECTED ? MODE.NORMAL : selected.mode);
+      TERM.endGroup();
     }
     this.selected = newSelect;
-    chk = true;
+    TERM.startGroup();
     setCursorPos(pos.x, pos.y + (selections.indexOf(selected) * 3));
-
-    TERM.setCursorPos(holder.offset().x + pos.x, holder.offset().y + pos.y);
     TERM.print(SelectionUI.getComp(selected.NAME, MODE.SELECTED, false));
+    TERM.endGroup();
     newSelect.mode = MODE.SELECTED;
-//    setCursorPos(pos.x, pos.y);
-//    TERM.print(getRender());
   }
 
   public void moveUp(Object[] args) {

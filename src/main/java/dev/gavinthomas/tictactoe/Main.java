@@ -8,6 +8,7 @@ import dev.gavinthomas.tictactoe.TicTacToe;
 
 import dev.gavinthomas.tictactoe.TTT;
 import dev.gavinthomas.tictactoe.ui.Menu;
+import dev.gavinthomas.tictactoe.ui.OptionUI;
 import dev.gavinthomas.tictactoe.utils.Minimax;
 import dev.gavinthomas.tictactoe.utils.Term;
 import io.raffi.drawille.Canvas;
@@ -25,25 +26,23 @@ public class Main {
   public static boolean abc = true;
   public static final Term TERM = new Term();
 
-
-  public static void add(int num) {
-
-  }
-
   public static void main(String[] args) throws Exception {
 
 //    System.out.println(Visuals.title1(new boolean[]{true, true, true}));
 
-    int step = 0;
-    List<Boolean> currOn = Arrays.asList(false, false, false, false, false, false, false, false, false);
-
-//    input.init();
 //System.out.println(Visuals.box(40, 20));
+//    OptionUI.Option o = new OptionUI.Option("Testing",
+//        new String[]{"A", "B"});
+//    o.mode = OptionUI.MODE.DISABLED;
+
+    Thread.sleep(1000);
+//    System.out.println(Visuals.optionUI(o));
     TicTacToe tttG = new TicTacToe();
-    tttG.init();
+//    tttG.init();
     while (abc) {
-//      Thread.onSpinWait();
-      tttG.newGame(new Game.Builder().playerOpponent().firstMove(0));
+      Thread.onSpinWait();
+//      tttG.newGame(false, true);
+//      tttG.newGame(true, false);
     }
 
 //    Game g = new Game.Builder().computerOpponent().firstMove(0).build();
