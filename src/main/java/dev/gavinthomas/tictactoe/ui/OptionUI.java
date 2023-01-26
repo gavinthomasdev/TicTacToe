@@ -38,7 +38,7 @@ public class OptionUI implements UIComponent {
   public String getRender() {
     StringBuilder vals = new StringBuilder();
     for (Option o : options) {
-      vals.append(getComp(o.NAME, o, options.indexOf(o) != options.size() - 1));
+      vals.append(getComp(o, options.indexOf(o) != options.size() - 1));
     }
     return vals.toString();
   }
@@ -64,18 +64,16 @@ public class OptionUI implements UIComponent {
     if (selected != null) {
       TERM.startGroup();
       setCursorPos(pos.x, pos.y + (options.indexOf(selected) * 3));
-      TERM.print(getComp(selected.NAME,
-          selected,
-          false));
       selected.mode = (selected.mode == MODE.SELECTED ? MODE.NORMAL : selected.mode);
+      TERM.print(getComp(selected, false));
       TERM.endGroup();
     }
     this.selected = newSelect;
     TERM.startGroup();
     setCursorPos(pos.x, pos.y + (options.indexOf(selected) * 3));
-    TERM.print(getComp(selected.NAME, selected, false));
-    TERM.endGroup();
     newSelect.mode = MODE.SELECTED;
+    TERM.print(getComp(selected, false));
+    TERM.endGroup();
   }
 
   public void moveUp(Object[] args) {
@@ -92,6 +90,19 @@ public class OptionUI implements UIComponent {
     setSelected(options.get(next));
   }
 
+  public void moveLeft(Object[] args) {
+    if (selected == null) return;
+    selected.moveLeft();
+    setCursorPos(pos.x, pos.y + (options.indexOf(selected) * 3));
+    TERM.print(getComp(selected, false));
+  }
+
+  public void moveRight(Object[] args) {
+    if (selected == null) return;
+    selected.moveRight();
+    setCursorPos(pos.x, pos.y + (options.indexOf(selected) * 3));
+    TERM.print(getComp(selected, false));
+  }
 
 
   private int findNotDisabled(int start, boolean posIncrement) {
@@ -137,7 +148,7 @@ public class OptionUI implements UIComponent {
     }
   }
 
-  public static String getComp(String name, Option opt, boolean cursorMove) {
+  public static String getComp(Option opt, boolean cursorMove) {
     return Visuals.optionUI(opt) + (cursorMove ? "\033[1B\033[60D" : "");
   }
 

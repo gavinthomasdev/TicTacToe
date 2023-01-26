@@ -23,7 +23,7 @@ public class Menu implements UIHolder {
 
   public Menu() {
     Selection[] sArr = {
-        new Selection("New Game", this::temp, new Object[]{}),
+        new Selection("New Game", this::newGameUI, new Object[]{}),
         new Selection("Load Game", this::temp, new Object[]{}),
         new Selection("Settings", this::temp, new Object[]{})
     };
@@ -43,6 +43,7 @@ public class Menu implements UIHolder {
         new Object[] { KeybindArgument.KEYCODE }, sui::select));
     TicTacToe.CURR.registerKB(KBS);
     sui.disable(sArr[1], true);
+    sui.disable(sArr[2], true);
   }
 
   public void endTasks() {
@@ -73,6 +74,12 @@ public class Menu implements UIHolder {
 //    System.out.print(tempFill.repeat(15));
 
 //    comps.get(0).render();
+  }
+
+  private void newGameUI(Object[] args) {
+    endTasks();
+    TicTacToe.CURR.deregisterKB(KBS);
+    TicTacToe.CURR.newGameUI();
   }
 
   public void temp(Object[] args) {

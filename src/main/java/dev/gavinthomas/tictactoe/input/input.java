@@ -10,6 +10,7 @@ import java.util.concurrent.RejectedExecutionException;
 import org.jline.terminal.*;
 import org.jline.utils.*;
 import org.jline.keymap.*;
+import out.Out;
 
 public abstract class input {
   private static volatile boolean initiated = false;
@@ -68,6 +69,7 @@ public abstract class input {
         }
         for (Keybind kb : KEYS) {
           if (kb.hasKey(key)) {
+            Out.append(key);
             kb.handle(key);
           }
         }

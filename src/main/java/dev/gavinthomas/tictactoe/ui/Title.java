@@ -10,6 +10,7 @@ import java.awt.Point;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 
 public class Title implements UIComponent {
@@ -60,6 +61,9 @@ public class Title implements UIComponent {
 
   public void endTasks() {
     toggleAnimations(false);
+    try {
+      animExec.awaitTermination(4, TimeUnit.SECONDS);
+    } catch (InterruptedException ignore) {}
   }
 
   private void startAnimations() {
