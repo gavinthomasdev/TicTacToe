@@ -1,5 +1,6 @@
 package dev.gavinthomas.tictactoe.types;
 
+import dev.gavinthomas.tictactoe.ui.OptionUI;
 import dev.gavinthomas.tictactoe.ui.SelectionUI;
 
 import java.text.MessageFormat;
@@ -163,7 +164,6 @@ public abstract class Visuals {
           "{0}│{2}│{1}" +
           "{0}│{2}│{1}" +
           "{0}│{2}│{1}" +
-
           "{0}╰────────────────╯",
       (Object[]) highlightVals);
 
@@ -176,64 +176,10 @@ public abstract class Visuals {
       "{0} {2} {1}" +
       "{0} {2} {1}" +
       "{0} {2} {1}" +
-                                                              
       "{0}                  ",
       (Object[]) highlightVals);
 
 
-  public static final String TITLE = MessageFormat.format("" +
-      "{0}████████╗██╗░█████╗░" + "████████╗░█████╗░░█████╗░".replaceAll("█", "\033[31m█\033[0m") + "████████╗░█████╗░███████╗{1}" +
-      "{0}╚══██╔══╝██║██╔══██╗" + "╚══██╔══╝██╔══██╗██╔══██╗".replaceAll("█", "\033[31m█\033[0m") + "╚══██╔══╝██╔══██╗██╔════╝{1}" +
-      "{0}░░░██║░░░██║██║░░╚═╝" + "░░░██║░░░███████║██║░░╚═╝".replaceAll("█", "\033[31m█\033[0m") + "░░░██║░░░██║░░██║█████╗░░{1}" +
-      "{0}░░░██║░░░██║██║░░██╗" + "░░░██║░░░██╔══██║██║░░██╗".replaceAll("█", "\033[31m█\033[0m") + "░░░██║░░░██║░░██║██╔══╝░░{1}" +
-      "{0}░░░██║░░░██║╚█████╔╝" + "░░░██║░░░██║░░██║╚█████╔╝".replaceAll("█", "\033[31m█\033[0m") + "░░░██║░░░╚█████╔╝███████╗{1}" +
-      "{0}░░░╚═╝░░░╚═╝░╚════╝░" + "░░░╚═╝░░░╚═╝░░╚═╝░╚════╝░".replaceAll("█", "\033[31m█\033[0m") + "░░░╚═╝░░░░╚════╝░╚══════╝{1}",
-      (Object[]) titleVals);
-
-
-
-  public static String title1(boolean[] reds) {
-    String[] vals = { "\033[0m\033[1B\033[20D",
-        (reds[0] ? "\033[38;2;255;0;0m" : "\033[37m"),
-        (reds[1] ? "\033[38;2;255;0;0m" : "\033[37m"),
-        (reds[2] ? "\033[38;2;255;0;0m" : "\033[37m")
-    };
-
-    return MessageFormat.format("" +
-        "{1}████████╗{2}██╗{3}░█████╗░{0}" +
-        "{1}╚══██╔══╝{2}██║{3}██╔══██╗{0}" +
-        "{1}░░░██║░░░{2}██║{3}██║░░╚═╝{0}" +
-        "{1}░░░██║░░░{2}██║{3}██║░░██╗{0}" +
-        "{1}░░░██║░░░{2}██║{3}╚█████╔╝{0}" +
-        "{1}░░░╚═╝░░░{2}╚═╝{3}░╚════╝░\033[0m",
-        (Object[]) vals).replaceAll("░", "\033[37m░\033[0m");
-  }
-
-  public static String title2(String color) {
-    String[] vals = { "\033[" + color + "m", "\033[1B\033[25D" };
-
-    return MessageFormat.format("" +
-            "{0}████████╗░█████╗░░█████╗░{1}" +
-            "{0}╚══██╔══╝██╔══██╗██╔══██╗{1}" +
-            "{0}░░░██║░░░███████║██║░░╚═╝{1}" +
-            "{0}░░░██║░░░██╔══██║██║░░██╗{1}" +
-            "{0}░░░██║░░░██║░░██║╚█████╔╝{1}" +
-            "{0}░░░╚═╝░░░╚═╝░░╚═╝░╚════╝░",
-        (Object[]) vals);
-  }
-
-  public static String title3(String color) {
-    String[] vals = { "\033[" + color + "m", "\033[1B\033[25D" };
-
-    return MessageFormat.format("" +
-            "{0}████████╗░█████╗░███████╗{1}" +
-            "{0}╚══██╔══╝██╔══██╗██╔════╝{1}" +
-            "{0}░░░██║░░░██║░░██║█████╗░░{1}" +
-            "{0}░░░██║░░░██║░░██║██╔══╝░░{1}" +
-            "{0}░░░██║░░░╚█████╔╝███████╗{1}" +
-            "{0}░░░╚═╝░░░░╚════╝░╚══════╝",
-        (Object[]) vals);
-  }
 
   public static String title(boolean[] reds) {
     StringBuilder finStr = new StringBuilder();
@@ -281,7 +227,7 @@ public abstract class Visuals {
 
   public static String menuButton(String text, SelectionUI.MODE mode) {
     String[] vals = { "\033[0m\033[1B\033[20D",
-        (mode == SelectionUI.MODE.DISABLED ? "\033[2m" : ""),
+        (mode == SelectionUI.MODE.DISABLED ? "\033[38;2;128;128;128m" : ""),
         (mode == SelectionUI.MODE.SELECTED ? "\033[1m" : ""),
         "\033[0m"
     };
@@ -293,8 +239,34 @@ public abstract class Visuals {
 
     return MessageFormat.format("" +
         "{1}" + lines[2] + lines[0].repeat(18) + lines[3] + "{0}" +
-        "{1}" + lines[1] + "{2}" + text + "{3}" + lines[1] + "{0}" +
+        "{1}" + lines[1] + "{2}" + text + "{3}{1}" + lines[1] + "{0}" +
         "{1}" + lines[5] + lines[0].repeat(18) + lines[4] + "\033[0m",
+        (Object[]) vals);
+  }
+
+  public static String optionUI(OptionUI.Option opt) {
+    int width = 60;
+    String[] vals = { "\033[0m\033[1B\033[" + width + "D",
+        (opt.mode == OptionUI.MODE.DISABLED ? "\033[38;2;128;128;128m" : ""),
+        (opt.mode == OptionUI.MODE.SELECTED ? "\033[1m" : ""),
+        "\033[0m"
+    };
+    String name = " {2}" + opt.NAME + "{3}";
+    String optStr = "{1}" + (opt.canMoveLeft() ? "<" : " ") + " \033[3m" + opt.current + "\033[0m{1} " +
+        (opt.canMoveRight() ? ">" : " ") + "{3}";
+
+    String full = name + " ".repeat(width - 3 - opt.NAME.length() - opt.current.length() - 4) + optStr;
+
+//    text = " ".repeat((text.length() % 2 == 0 ? 9 : 8) - (text.length() / 2)) +
+//        text + " ".repeat(9 - (text.length() / 2));
+    String[] lines = (opt.mode == OptionUI.MODE.SELECTED ?
+        new String[]{"━", "┃", "┏", "┓", "┛", "┗"} :
+        new String[]{"─", "│", "┌", "┐", "┘", "└"});
+
+    return MessageFormat.format("" +
+            "{1}" + lines[2] + lines[0].repeat(width - 2) + lines[3] + "{0}" +
+            "{1}" + lines[1] + full + "{1}" + lines[1] + "{0}" +
+            "{1}" + lines[5] + lines[0].repeat(width - 2) + lines[4] + "\033[0m",
         (Object[]) vals);
   }
 

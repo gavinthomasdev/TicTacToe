@@ -36,8 +36,10 @@ public class Title implements UIComponent {
   
   public void render() {
     toggleAnimations(false);
+    TERM.startGroup();
     setCursorPos(pos.x, pos.y);
     TERM.print(Visuals.title(new boolean[]{false, false, false, false, false, false, false, false, false}));
+    TERM.endGroup();
     toggleAnimations(true);
   }
   
@@ -98,8 +100,10 @@ public class Title implements UIComponent {
           if (i > 8 || i < 0) continue;
           currOn[i] = true;
         }
+        TERM.startGroup();
         setCursorPos(pos.x, pos.y);
         TERM.print(Visuals.title(currOn));
+        TERM.endGroup();
         step++;
         currOn = new boolean[]{false, false, false, false, false, false, false, false, false};
         try {
@@ -114,8 +118,10 @@ public class Title implements UIComponent {
           if (i > 8 || i < 0) continue;
           currOn[i] = true;
         }
+        TERM.startGroup();
         setCursorPos(pos.x, pos.y);
         TERM.print(Visuals.title(currOn));
+        TERM.endGroup();
         step--;
         currOn = new boolean[]{false, false, false, false, false, false, false, false, false};
         try {
@@ -124,8 +130,10 @@ public class Title implements UIComponent {
         }
       }
     }
+    TERM.startGroup();
     setCursorPos(pos.x, pos.y);
     TERM.print(Visuals.title(new boolean[]{false, false, false, false, false, false, false, false, false}));
+    TERM.endGroup();
   }
 
   private void titleAnim2(Integer delay, Integer duration) {
@@ -136,16 +144,20 @@ public class Title implements UIComponent {
       boolean[] currOn = (i % 2 == 0 ?
           new boolean[]{true, false, true, false, true, false, true, false, true} :
           new boolean[]{false, true, false, true, false, true, false, true, false});
+      TERM.startGroup();
       setCursorPos(pos.x, pos.y);
       TERM.print(Visuals.title(currOn));
+      TERM.endGroup();
       try {
         Thread.sleep(delay);
       } catch (InterruptedException ignore) {
       }
       i++;
     }
+    TERM.startGroup();
     setCursorPos(pos.x, pos.y);
     TERM.print(Visuals.title(new boolean[]{false, false, false, false, false, false, false, false, false}));
+    TERM.endGroup();
   }
 }
 

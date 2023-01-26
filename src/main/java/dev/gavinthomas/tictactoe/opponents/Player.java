@@ -57,4 +57,10 @@ public class Player implements Opponent {
     board.highlightSpot(selectedSpot.x, selectedSpot.y, true);
     this.canMove = true;
   }
+
+  public void getMove(int x, int y) {
+    selectedSpot.x = x;
+    selectedSpot.y = y;
+    getMove();
+  }
 }

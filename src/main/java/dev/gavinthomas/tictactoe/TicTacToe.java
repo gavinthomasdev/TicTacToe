@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import dev.gavinthomas.tictactoe.input.*;
+import dev.gavinthomas.tictactoe.input.Keybind;
+import dev.gavinthomas.tictactoe.input.KeybindArgument;
+import dev.gavinthomas.tictactoe.input.Keycode;
+import dev.gavinthomas.tictactoe.input.input;
 import dev.gavinthomas.tictactoe.opponents.Computer;
 import dev.gavinthomas.tictactoe.opponents.Player;
 import dev.gavinthomas.tictactoe.types.Opponent;
@@ -15,6 +18,7 @@ import dev.gavinthomas.tictactoe.Game;
 import dev.gavinthomas.tictactoe.types.UIHolder;
 import dev.gavinthomas.tictactoe.types.Visuals;
 import dev.gavinthomas.tictactoe.ui.Menu;
+import dev.gavinthomas.tictactoe.ui.NewGameUI;
 import dev.gavinthomas.tictactoe.utils.Term;
 import dev.gavinthomas.tictactoe.utils.listeners;
 
@@ -22,6 +26,7 @@ public class TicTacToe {
   private List<Keybind> KBS = new ArrayList<>();
   private List<Keybind> KBSDIS = new ArrayList<>();
   private Game game;
+  private final List<UIHolder> UIS = new ArrayList<>();
   private UIHolder currentUI;
   private Keybind menuKBS;
   public boolean invalidSize = true;
@@ -35,29 +40,22 @@ public class TicTacToe {
     TicTacToe.CURR = this;
     this.init();
   }
+
   public void init() {
+    Term.watchQueue(true);
     new listeners.terminalResizeListener(this::resized);
     input.init();
     input.toggleRead(true);
     TERM.requestSize(this::updateTermSize);
-    menuKBS = new Keybind(
-        new Keycode[] { Keycode.UP_ARROW, Keycode.DOWN_ARROW, Keycode.LEFT_ARROW, Keycode.RIGHT_ARROW, Keycode.SPACE, Keycode.LOWER_L },
-        new Object[] { KeybindArgument.KEYCODE }, this::input);
-    input.addBinds(menuKBS);
-    currentUI = new Menu();
+//    UIS.add(new Menu());
+    UIS.add(new NewGameUI());
+    currentUI = UIS.get(0);
     currentUI.render();
   }
 
-  public void newGame(Game.Builder gameConfig) {
-    menuKBS.set.enabled(false);
-    this.game = new Game(gameConfig);
+  public void newGame(boolean comp1, boolean comp2) {
+    this.game = new Game(comp1, comp2);
     this.game.start();
-    menuKBS.set.enabled(true);
-  }
-
-  public void registerKB(Keybind kb) {
-    KBS.add(kb);
-    input.addBinds(kb);
   }
 
   public void registerKB(List<Keybind> kb) {
@@ -71,7 +69,7 @@ public class TicTacToe {
   }
 
   public void resized() {
-    TERM.requestSize(this::updateTermSize);
+    privTerm.requestSize(this::updateTermSize);
   }
 
   public void render() {
@@ -85,20 +83,25 @@ public class TicTacToe {
 
 
   public void renderSizeUI(int x, int y) {
-    TERM.clear(true);
-    TERM.hideCursor(true);
-    TERM.saveCursor();
-    System.out.print("█▀▀▀\033[1B\033[4D█");
-    TERM.setCursorPos(x - 3, 1);
-    System.out.print("▀▀▀█\033[1B█");
-    TERM.setCursorPos(1, y - 1);
-    System.out.print("█\033[1B\033[2D█▄▄▄");
-    TERM.setCursorPos(x, y - 1);
-    System.out.print("█\033[1B\033[3D▄▄▄█");
-    TERM.restoreCursor();
-    if (x < 30 || y < 10) return;
-    TERM.setCursorPos((int) Math.ceil((x / 2.0) - 9.5), (y / 2) - 2);
-    System.out.print(Visuals.sizeUI(x, y, 100, 32));
+    privTerm.startGroup();
+    privTerm.clear(true);
+    privTerm.hideCursor(true);
+    privTerm.saveCursor();
+    privTerm.print("█▀▀▀\033[1B\033[4D█");
+    privTerm.setCursorPos(x - 3, 1);
+    privTerm.print("▀▀▀█\033[1B█");
+    privTerm.setCursorPos(1, y - 1);
+    privTerm.print("█\033[1B\033[2D█▄▄▄");
+    privTerm.setCursorPos(x, y - 1);
+    privTerm.print("█\033[1B\033[3D▄▄▄█");
+    privTerm.restoreCursor();
+    if (x < 30 || y < 10) {
+      privTerm.endGroup();
+      return;
+    };
+    privTerm.setCursorPos((int) Math.ceil((x / 2.0) - 9.5), (y / 2) - 2);
+    privTerm.print(Visuals.sizeUI(x, y, 100, 32));
+    privTerm.endGroup();
 //    System.out.print(Visuals.sizeBorder(x, y));
   }
 
@@ -108,6 +111,7 @@ public class TicTacToe {
     if (x < 100 || y < 32) {
       if (currentUI instanceof Menu) ((Menu) currentUI).endTasks();
       this.invalidSize = true;
+      TERM.enabled = false;
       for (Keybind kb : KBS) {
         kb.set.forceDisabled(true);
       }
@@ -116,6 +120,7 @@ public class TicTacToe {
     }
 
     this.invalidSize = false;
+    TERM.enabled = true;
     for (Keybind kb : KBS) {
       kb.set.forceDisabled(false);
     }
